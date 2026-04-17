@@ -39,7 +39,7 @@ const FlightCard = ({ flight, isCheapest, index = 0 }) => {
 
       <div className="price-section">
         <div className="price">₹{flight.price.toLocaleString('en-IN')}</div>
-        <button className="btn-primary" style={{ width: '100%' }} onClick={() => navigate('/checkout')}>Book Now</button>
+        <button className="btn-primary" style={{ width: '100%' }} onClick={() => navigate('/checkout', { state: { flight } })}>Book Now</button>
       </div>
     </div>
   );

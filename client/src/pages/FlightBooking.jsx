@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaPlane } from 'react-icons/fa';
+import { FaPlane, FaHome } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import HeroSearch from '../components/HeroSearch';
 import FlightCard from '../components/FlightCard';
 
-const Home = () => {
+const FlightBooking = () => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -44,7 +44,9 @@ const Home = () => {
           price: Math.floor(Math.random() * 5000) + 3000, 
           origin: searchParams.origin || 'DEL',
           destination: searchParams.destination || 'BOM',
-          date: searchParams.date
+          date: searchParams.date,
+          passengers: searchParams.passengers || 1,
+          cabinClass: searchParams.cabinClass || 'Economy'
         };
       });
 
@@ -58,39 +60,22 @@ const Home = () => {
     }
   };
 
-  const authStatus = localStorage.getItem('flightfinder_auth');
-
-  const logout = () => {
-    localStorage.removeItem('flightfinder_auth');
-    window.location.reload();
-  };
+  // Auth controls handled on PortalHome
 
   return (
     <div className="container">
       <header className="header animate-fade-in-up">
-        <div className="logo">
-          <FaPlane style={{ color: '#22d3ee' }} />
-          Abhi Flight Finder
-        </div>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <div className="logo" style={{ cursor: 'pointer' }}>
+            <FaHome style={{ color: '#22d3ee', marginRight: '8px' }} />
+            <FaPlane style={{ color: '#22d3ee' }} />
+            <span style={{ marginLeft: '8px' }}>Abhi Flight Finder</span>
+          </div>
+        </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <Link to="/pnr" className="glass" style={{ padding: '0.5rem 1rem', textDecoration: 'none', color: '#10b981', borderColor: 'rgba(16, 185, 129, 0.3)', fontWeight: 'bold' }}>
             Check PNR
           </Link>
-          {authStatus ? (
-             <>
-               <span style={{ color: 'white', fontWeight: 500 }}>
-                 Hello, {authStatus.charAt(0).toUpperCase() + authStatus.slice(1)}
-               </span>
-               <button onClick={logout} className="glass" style={{ padding: '0.5rem 1rem', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
-                 Sign Out
-               </button>
-             </>
-          ) : (
-             <>
-               <Link to="/login" className="glass" style={{ padding: '0.5rem 1rem', textDecoration: 'none', color: 'white' }}>Sign In</Link>
-               <Link to="/login?mode=signup" className="btn-primary" style={{ padding: '0.5rem 1rem', textDecoration: 'none', borderRadius: '8px', color: 'white' }}>Sign Up</Link>
-             </>
-          )}
         </div>
       </header>
 
@@ -127,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default FlightBooking;
