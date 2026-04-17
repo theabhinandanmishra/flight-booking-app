@@ -5,9 +5,20 @@ import './Checkout.css';
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const flight = location.state?.flight;
-  const numPassengers = flight?.passengers ? parseInt(flight.passengers, 10) : 1;
-  const pricePerPerson = flight?.price || 4250;
+  const item = location.state?.item || location.state?.flight;
+  const bookingType = location.state?.type || 'Flight';
+  const numPassengers = item?.passengers || item?.guests ? parseInt(item.passengers || item.guests, 10) : 1;
+  
+  // Try to find a logical price or cost
+  let pricePerPerson = 4250;
+  if (item?.price) {
+    pricePerPerson = item.price;
+  } else if (item?.costForTwo) {
+    // Basic parse for '₹3,500' format -> 1750 per person
+    const numericStr = item.costForTwo.replace(/[^0-9]/g, '');
+    if (numericStr) pricePerPerson = parseInt(numericStr, 10) / 2;
+  }
+
   const totalAmount = pricePerPerson * numPassengers;
 
   const [passengerName, setPassengerName] = useState('Guest (Login recommended)');
@@ -43,13 +54,13 @@ const Checkout = () => {
 
   return (
     <div className="checkout-wrapper">
-      <div className="checkout-logo">✈ Abhi Flight Finder Checkout</div>
+      <div className="checkout-logo">✈ Abhi Booking Checkout</div>
 
       {!isSuccess ? (
         <div className="glass checkout-container">
-          <h2 style={{ marginBottom: '1rem' }}>Complete Your Booking</h2>
+          <h2 style={{ marginBottom: '1rem' }}>Complete Your {bookingType} Booking</h2>
           <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-            Secure checkout process for your selected flight.
+            Secure checkout process for your selected {bookingType.toLowerCase()}.
           </p>
           
           <form className="checkout-form" onSubmit={handlePayment}>
@@ -59,7 +70,7 @@ const Checkout = () => {
                   style={{ padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: expandedPassenger === idx ? 'rgba(255,255,255,0.05)' : 'transparent', transition: 'background 0.3s' }}
                   onClick={() => setExpandedPassenger(expandedPassenger === idx ? -1 : idx)}
                 >
-                  <h3 style={{ color: 'var(--accent)', margin: 0, fontSize: '1.2rem' }}>Passenger {idx + 1} Details</h3>
+                  <h3 style={{ color: 'var(--accent)', margin: 0, fontSize: '1.2rem' }}>{bookingType === 'Table Reservation' ? 'Guest' : 'Passenger'} {idx + 1} Details</h3>
                   <span style={{ color: 'var(--text-muted)' }}>{expandedPassenger === idx ? '▲' : '▼'}</span>
                 </div>
 
@@ -90,7 +101,7 @@ const Checkout = () => {
                     </div>
                     {idx === 0 && (
                       <>
-                        <h4 style={{ marginBottom: '1rem', marginTop: '1.5rem', color: 'var(--text-muted)' }}>Contact Information (Primary Passenger)</h4>
+                        <h4 style={{ marginBottom: '1rem', marginTop: '1.5rem', color: 'var(--text-muted)' }}>Contact Information (Primary {bookingType === 'Table Reservation' ? 'Guest' : 'Passenger'})</h4>
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
                           <label>Email Address</label>
                           <input type="email" className="search-input" style={{ width: '100%' }} required />
@@ -111,7 +122,7 @@ const Checkout = () => {
                 Total Amount: <span style={{ color: '#10b981' }}>₹{totalAmount.toLocaleString('en-IN')}</span>
               </strong><br/>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Includes base fare for {numPassengers} passenger(s) and convenience fees
+                Includes base fare for {numPassengers} {bookingType === 'Table Reservation' ? 'guest' : 'passenger'}(s) and convenience fees
               </span>
             </div>
 

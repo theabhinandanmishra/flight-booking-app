@@ -1,7 +1,9 @@
 import React from 'react';
 import { FaBus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const BusCard = ({ bus, isRecommended, index }) => {
+  const navigate = useNavigate();
   return (
     <div className={`flight-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}>
       {isRecommended && (
@@ -45,7 +47,11 @@ const BusCard = ({ bus, isRecommended, index }) => {
 
       <div className="price-section">
         <div className="price" style={{ color: '#ef4444' }}>₹{bus.price.toLocaleString()}</div>
-        <button className="btn-primary" style={{ background: 'linear-gradient(135deg, #ef4444, #f87171)', boxShadow: '0 4px 14px rgba(239, 68, 68, 0.4)' }}>
+        <button 
+          className="btn-primary" 
+          onClick={() => navigate('/checkout', { state: { item: bus, type: 'Bus Ticket' } })}
+          style={{ background: 'linear-gradient(135deg, #ef4444, #f87171)', boxShadow: '0 4px 14px rgba(239, 68, 68, 0.4)' }}
+        >
           Select Seats
         </button>
       </div>

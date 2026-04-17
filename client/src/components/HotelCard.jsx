@@ -1,11 +1,12 @@
 import React from 'react';
 import { FaStar, FaMapMarkerAlt, FaSwimmingPool, FaWifi, FaCoffee } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const HotelCard = ({ hotel, isRecommended, index }) => {
+  const navigate = useNavigate();
   return (
     <div 
-      className={`flight-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}
-      style={{ flexDirection: 'row', alignItems: 'stretch', padding: '1rem', gap: '1.5rem' }}
+      className={`flight-card hotel-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}
     >
       {isRecommended && (
         <div className="cheapest-badge" style={{ background: '#f59e0b', boxShadow: '0 0 10px rgba(245, 158, 11, 0.3)' }}>
@@ -13,9 +14,8 @@ const HotelCard = ({ hotel, isRecommended, index }) => {
         </div>
       )}
       
-      <div 
+      <div className="hotel-card-img"
         style={{ 
-          width: '200px', 
           minHeight: '150px', 
           borderRadius: '12px', 
           backgroundImage: `url(${hotel.image})`, 
@@ -24,7 +24,7 @@ const HotelCard = ({ hotel, isRecommended, index }) => {
         }} 
       />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0.5rem 0' }}>
+      <div className="hotel-card-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0.5rem 0' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>{hotel.name}</h3>
@@ -51,7 +51,11 @@ const HotelCard = ({ hotel, isRecommended, index }) => {
       <div className="price-section" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', minWidth: '150px', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '1.5rem' }}>
         <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '0.25rem' }}>Price per night</div>
         <div className="price" style={{ color: '#10b981', marginBottom: '1rem' }}>₹{hotel.price.toLocaleString()}</div>
-        <button className="btn-primary" style={{ width: '100%', padding: '0.5rem' }}>
+        <button 
+          className="btn-primary" 
+          style={{ width: '100%', padding: '0.5rem' }}
+          onClick={() => navigate('/checkout', { state: { item: hotel, type: 'Hotel Stay' } })}
+        >
           Book Room
         </button>
       </div>

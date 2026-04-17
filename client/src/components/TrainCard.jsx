@@ -1,7 +1,9 @@
 import React from 'react';
 import { FaTrain } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const TrainCard = ({ train, isFastest, index }) => {
+  const navigate = useNavigate();
   return (
     <div className={`flight-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}>
       {isFastest && (
@@ -44,7 +46,11 @@ const TrainCard = ({ train, isFastest, index }) => {
 
       <div className="price-section">
         <div className="price" style={{ color: '#8b5cf6' }}>₹{train.price.toLocaleString()}</div>
-        <button className="btn-primary" style={{ background: 'linear-gradient(135deg, #8b5cf6, #c084fc)', boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)' }}>
+        <button 
+          className="btn-primary" 
+          onClick={() => navigate('/checkout', { state: { item: train, type: 'Train Ticket' } })}
+          style={{ background: 'linear-gradient(135deg, #8b5cf6, #c084fc)', boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)' }}
+        >
           Book Ticket
         </button>
       </div>

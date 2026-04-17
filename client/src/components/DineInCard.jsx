@@ -1,11 +1,12 @@
 import React from 'react';
 import { FaUtensils, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const DineInCard = ({ restaurant, isFeatured, index }) => {
+  const navigate = useNavigate();
   return (
     <div 
-      className={`flight-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}
-      style={{ flexDirection: 'row', alignItems: 'stretch', padding: '1rem', gap: '1.5rem' }}
+      className={`flight-card dine-in-card glass animate-fade-in-up delay-${(index % 5 + 1) * 100}`}
     >
       {isFeatured && (
         <div className="cheapest-badge" style={{ background: '#f59e0b', boxShadow: '0 0 10px rgba(245, 158, 11, 0.3)' }}>
@@ -13,9 +14,8 @@ const DineInCard = ({ restaurant, isFeatured, index }) => {
         </div>
       )}
       
-      <div 
+      <div className="dine-in-card-img"
         style={{ 
-          width: '200px', 
           minHeight: '150px', 
           borderRadius: '12px', 
           backgroundImage: `url(${restaurant.image})`, 
@@ -24,7 +24,7 @@ const DineInCard = ({ restaurant, isFeatured, index }) => {
         }} 
       />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0.5rem 0' }}>
+      <div className="dine-in-card-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '0.5rem 0' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0 }}>{restaurant.name}</h3>
@@ -53,7 +53,11 @@ const DineInCard = ({ restaurant, isFeatured, index }) => {
       </div>
 
       <div className="price-section" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', minWidth: '150px', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '1.5rem' }}>
-        <button className="btn-primary" style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)' }}>
+        <button 
+          className="btn-primary" 
+          onClick={() => navigate('/checkout', { state: { item: restaurant, type: 'Table Reservation' } })}
+          style={{ width: '100%', padding: '0.75rem', background: 'linear-gradient(135deg, #f59e0b, #fbbf24)', boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)' }}
+        >
           Reserve Table
         </button>
       </div>
