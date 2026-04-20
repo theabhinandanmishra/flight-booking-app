@@ -9,6 +9,7 @@ const Login = () => {
   const [currentMode, setCurrentMode] = useState('user'); // 'user' or 'admin'
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isNotRobot, setIsNotRobot] = useState(false);
 
   useEffect(() => {
     if (searchParams.get('mode') === 'signup') {
@@ -22,6 +23,12 @@ const Login = () => {
 
     const email = e.target.email.value;
     const password = e.target.password.value;
+
+    if (!isNotRobot) {
+      alert('Please confirm you are not a robot.');
+      setIsLoading(false);
+      return;
+    }
 
     // Simulate Authentication delay
     setTimeout(() => {
@@ -45,7 +52,7 @@ const Login = () => {
     <div className="login-wrapper">
       <div className="glass login-container">
         <div className="login-logo">
-          <span style={{ color: 'var(--accent)', fontSize: '1.75rem' }}>✈</span> Abhi Flight Finder
+          <span style={{ color: 'var(--accent)', fontSize: '1.75rem' }}>🌐</span> Abhi Booking Portal
         </div>
 
         <div className="toggle-group">
@@ -54,7 +61,7 @@ const Login = () => {
             onClick={() => setCurrentMode('user')}
             type="button"
           >
-            Passenger
+            User
           </button>
           <button 
             className={`toggle-btn ${currentMode === 'admin' ? 'active' : ''}`}
@@ -98,6 +105,22 @@ const Login = () => {
             />
           </div>
 
+          <div className="captcha-container">
+            <label className="captcha-label">
+              <input 
+                type="checkbox" 
+                className="captcha-checkbox"
+                checked={isNotRobot}
+                onChange={(e) => setIsNotRobot(e.target.checked)}
+              />
+              <span className="captcha-text">I'm not a robot</span>
+            </label>
+            <div className="captcha-logo">
+              <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" width="24" />
+              <div className="captcha-subtext">reCAPTCHA</div>
+            </div>
+          </div>
+
           <button type="submit" className="submit-btn" disabled={isLoading}>
             {isLoading ? 'Authenticating...' : (
               isSignup ? 'Create Account' : (currentMode === 'admin' ? 'Admin Login' : 'Sign In')
@@ -121,7 +144,7 @@ const Login = () => {
         </form>
 
         <div className="back-nav">
-          &larr; <Link to="/">Back to Flights</Link>
+          &larr; <Link to="/">Back to Portal</Link>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Checkout from './pages/Checkout';
 import AnimatedBackground from './components/AnimatedBackground';
 import PnrStatus from './pages/PnrStatus';
+import AiPlanner from './pages/AiPlanner';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/pnr" element={<PnrStatus />} />
+        <Route path="/ai-planner" element={<AiPlanner />} />
       </Routes>
     </BrowserRouter>
   );

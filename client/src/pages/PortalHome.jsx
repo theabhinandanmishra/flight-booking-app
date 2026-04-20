@@ -1,8 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaPlane, FaHotel, FaUtensils, FaTrain, FaBus, FaCompass } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaPlane, FaHotel, FaUtensils, FaTrain, FaBus, FaCompass, FaMagic } from 'react-icons/fa';
 
 const PortalHome = () => {
+  const navigate = useNavigate();
+  const [aiQuery, setAiQuery] = useState('');
+
+  const handleAiSearch = (e) => {
+    e.preventDefault();
+    if (aiQuery.trim()) {
+      navigate(`/ai-planner?q=${encodeURIComponent(aiQuery)}`);
+    }
+  };
+
   const cards = [
     {
       title: 'Flights',
@@ -88,9 +98,25 @@ const PortalHome = () => {
         <h1 style={{ fontSize: '3rem', marginBottom: '1rem', background: 'linear-gradient(to right, #22d3ee, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           Where would you like to go tomorrow?
         </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto', marginBottom: '2rem' }}>
           Discover the world with our premium booking services. Explore flights, stays, dining, and more.
         </p>
+
+        <form onSubmit={handleAiSearch} className="ai-planner-form">
+          <div className="ai-input-wrapper glass">
+            <FaMagic className="ai-icon" />
+            <input 
+              type="text" 
+              placeholder="e.g. Plan a 3-day trip to BLR..." 
+              className="ai-input"
+              value={aiQuery}
+              onChange={(e) => setAiQuery(e.target.value)}
+            />
+            <button type="submit" className="ai-submit-btn">
+              Let AI Plan It ✨
+            </button>
+          </div>
+        </form>
       </div>
 
       <div className="portal-grid">
